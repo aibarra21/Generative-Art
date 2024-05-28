@@ -1,0 +1,33 @@
+---
+title: "Generative-Art-pt1"
+format: html
+editor: visual
+---
+
+## Generative Art: Part 1
+
+```{r}
+
+library(ggplot2)
+library(tidyverse)
+
+```
+
+```{r}
+view(msleep)
+```
+
+```{r}
+msleep %>% 
+  ggplot(aes(sleep_total, awake, color=vore, size=sleep_cycle)) + 
+  geom_point(show.legend = FALSE, size = 25) + 
+  coord_polar() + 
+  theme_void() + 
+  scale_color_brewer()
+```
+
+## Generative Art: Part 2
+
+```{r}
+
+```
