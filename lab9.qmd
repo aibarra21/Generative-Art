@@ -14,14 +14,15 @@ library(tidyverse)
 ```
 
 ```{r}
-view(msleep)
-```
-
-```{r}
 msleep %>% 
-  ggplot(aes(sleep_total, awake, color=vore, size=sleep_cycle)) + 
-  geom_point(show.legend = FALSE, size = 25) + 
-  coord_polar() + 
+  ggplot(aes(sleep_total, awake, color=vore, size=bodywt)) + 
+  geom_point(show.legend = FALSE, size = 20, shape = 19) +
+  geom_point(show.legend = FALSE, size = 10, shape = 3,  stroke = .5, colour = "white") + 
+  geom_point(show.legend = FALSE, size = 15, colour = "white", shape = 1,  stroke = 2) +
+  geom_abline(intercept = 13, slope = -3,  colour="lightblue")+
+  scale_x_continuous(expand = c(0, .5)) +
+  coord_radial(start = -100 * pi, end = - 2 * pi, inner.radius = 0.5, rotate.angle = TRUE,
+               expand = FALSE, direction = -1) + 
   theme_void() + 
   scale_color_brewer()
 ```
