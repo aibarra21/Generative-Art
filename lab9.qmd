@@ -1,12 +1,16 @@
 ---
-title: "Generative-Art-pt1"
+title: "Generative Art"
 format: html
 editor: visual
+embed-resources: true
+self-contained: true
 ---
 
-## Generative Art: Part 1
+## Spirits in the Universe
 
 ```{r}
+#| message: false
+#| echo: false
 
 library(ggplot2)
 library(tidyverse)
@@ -14,23 +18,84 @@ library(tidyverse)
 ```
 
 ```{r}
+#| warning: false
+#| echo: false
+
+
 msleep %>% 
   ggplot(aes(sleep_total, awake, color=vore, size=bodywt)) + 
-  geom_point(show.legend = FALSE, size = 20, shape = 19) +
-  geom_point(show.legend = FALSE, size = 10, shape = 3,  stroke = .5, colour = "white") + 
-  geom_point(show.legend = FALSE, size = 15, colour = "white", shape = 1,  stroke = 2) +
-  geom_abline(intercept = 13, slope = -3,  colour="lightblue")+
-  scale_x_continuous(expand = c(0, .5)) +
-  coord_radial(start = -100 * pi, end = - 2 * pi, inner.radius = 0.5, rotate.angle = TRUE,
-               expand = FALSE, direction = -1) + 
+  geom_segment(xend = msleep$awake, show.legend = FALSE, position = position_jitter()) +
+  geom_point(show.legend = FALSE, size = 12, shape = 19) +
+  geom_point(show.legend = FALSE, size = 24, shape = 3, colour = "white", stroke = .5,) +
+  geom_point(show.legend = FALSE, size = 1,  shape = 9, colour = "white", stroke = 1) +
+  coord_radial(start = - pi ** 2, end = 0, 
+               inner.radius = 0.2, expand = FALSE, direction = -1) + 
   theme_void() + 
   scale_color_brewer()
 ```
 
-## Generative Art: Part 2
+**Artist:** Ashley Ibarra
+
+**Year:** 2024
+
+**Description:**
+
+"Spirits in the Universe" is a revolutionary masterpiece of the 21st century, aiming to bend the rules of art. The choice of a blue palette for the spherical background symbolizes the vastness of the universe and displays its limitless powers. The many orbs dance in harmony with ethereal energy and transmit supernatural magic around the boundless field of the universe in a clockwise motion around the crescent of the moon. "Spirits in the Universe" represents the gateway to the realms beyond, where spirits and magic come together in a cosmic dance of creation and transcendence. The inclusion of the crescent moon adds a celestial element that ties in the mystical powers of the universe. "Spirits in the Universe" aims to remind people to spend time marveling at the vastness, complexity, and beauty of the universe.
+
+**Choice:**
+
+The dataset, msleep, was used for the piece, as seasonally the spirits lie dormant until awaken by a presence. By using the theme_void(), the background of the image is removed for a clean look, and a nice blue color palette is applied to the points by using scale_color_brewer(). By using coord_radial(), the image uses a circular layout that is used to create the universe. The second and third geom_point() functions have color=white to represent the spirits and their magic radiating beyond.
+
+## Summer is Upon
 
 ```{r}
+#| message: false
+#| echo: false
 
-
+library(dplyr)
+library(ambient)
+library(ggfx)
 
 ```
+
+```{r}
+#| message: false
+#| echo: false
+
+x_coords <- seq(from = 0, to = 1, length.out = 240)
+y_coords <- seq(from = 0.5, to = 1, length.out = 50)
+z_coords <- seq(from = 0.3, to = .8 , length.out = 20)
+
+canvas <- expand.grid(x = x_coords, y = y_coords, z = z_coords)
+
+
+canvas <- canvas %>% 
+  mutate(mycolors = gen_waves(x * y, y * 3 * x, z ** pi, frequency = 155))
+
+mask <- geom_polygon(aes(x, y), show.legend = FALSE)
+
+thepainting <- ggplot(canvas, aes(x, y, fill = mycolors)) +
+    with_dither(
+    geom_raster(show.legend = FALSE)
+  ) +
+  theme_void() +
+  coord_equal() +
+  scale_fill_gradientn(colours = c("coral3","olivedrab", "darkseagreen", "cornflowerblue", "yellow"))+
+  mask
+
+
+thepainting
+
+```
+
+**Artist:** Ashley Ibarra
+
+**Year:** 2024
+
+**Description:**
+
+"Summer is Upon" is a piece reminiscent of the good summer days that bring joy and cheerfulness. The star-like features represent the late summer nights where the stars shine through on the hot summer night. The yellow background peeking through is the bright summer sun that shines powerfully. The red triangular shapes positioned at the top and bottom of the piece represent the sunrise and sunset watched during the free summer days. "Summer is Upon" shows the full bloom of the vibrant life summer brings.
+
+**Code Choice:**
+
+The packages used to create this generative art piece were ambient and ggfx. I chose to use gen_waves from the ambient package because summer reminds me of waves from the beach. I set the frequency of the gen_waves() function to 155 because this is how hot it can feel in San Luis Obispo where there is hardly any A/C. I chose to use pi as a multiplier in the z coordinate because I love eating pie in the summer. From the ggfx() package, I used the with_dither() function because the definition of the noun "dither" is "to be very nervous, excited, or confused," which I feel is the perfect summer experience. Adventures in summer can be nerve-wracking but also exciting.
